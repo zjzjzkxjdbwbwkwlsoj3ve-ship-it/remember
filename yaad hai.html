@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Thank You Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- RESET & BASE STYLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Hide default cursor */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #050505; /* Deepest black */
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- UPGRADE 5: CUSTOM SCROLLBAR --- */
+        ::-webkit-scrollbar { width: 0px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #FF00CC, #333399);
+            border-radius: 4px;
+        }
+
+        /* --- UPGRADE 5: CUSTOM CURSOR FOLLOWER --- */
+        .cursor-follower {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(255, 0, 204, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: transform 0.15s ease-out, background 0.15s ease-out;
+            z-index: 99999;
+            mix-blend-mode: screen;
+            box-shadow: 0 0 10px rgba(255, 0, 204, 0.3);
+        }
+        
+        .cursor-dot {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: #FF00CC;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 100000;
+        }
+
+        /* --- NEW: AURORA NEBULA ANIMATION (Deep Dark Mode Background) --- */
+        .aurora-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2; /* Behind the stars */
+            overflow: hidden;
+            background: #050505;
+        }
+
+        .aurora-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px); /* Makes it look like gas/clouds */
+            opacity: 0.5; /* Visible but not blinding */
+            animation: moveAurora 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Blob 1: Pink/Purple */
+        .blob-1 {
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: #560bad;
+            animation-delay: 0s;
+        }
+
+        /* Blob 2: Deep Blue */
+        .blob-2 {
+            bottom: -10%;
+            right: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: #3a0ca3;
+            animation-delay: -5s;
+        }
+
+        /* Blob 3: Neon Accent */
+        .blob-3 {
+            top: 40%;
+            left: 40%;
+            width: 40vw;
+            height: 40vw;
+            background: #f72585;
+            opacity: 0.3;
+            animation-delay: -10s;
+        }
+
+        @keyframes moveAurora {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        /* --- ORIGINALS: STARFIELD --- */
+        #stars-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; /* Behind content, In front of Aurora */
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: floatUp 20s linear infinite;
+        }
+        @keyframes floatUp {
+            from { transform: translateY(0); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            to { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        /* --- NEW: CINEMATIC GATE ANIMATION --- */
+        .curtain {
+            position: fixed;
+            top: 0; 
+            height: 100%; 
+            width: 50%; /* Exact half */
+            background-color: #050505; /* Matches body bg */
+            z-index: 9990;
+            
+            /* The Animation Magic: Bezier Curve for "Heavy Door" feel */
+            /* Starts slow, explodes fast, slows down at end */
+            transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1); 
+            
+            /* Hardware acceleration for smoothness */
+            will-change: transform; 
+        }
+
+        .curtain-left { 
+            left: 0; 
+            /* The Glowing Seam (Right side of left curtain) */
+            border-right: 2px solid #FF00CC; 
+            box-shadow: 5px 0 30px rgba(255, 0, 204, 0.5); /* Pink Glow */
+        }
+
+        .curtain-right { 
+            right: 0; 
+            /* The Glowing Seam (Left side of right curtain) */
+            border-left: 2px solid #333399; 
+            box-shadow: -5px 0 30px rgba(51, 51, 153, 0.5); /* Blue Glow */
+        }
+
+        /* When the class 'open' is added: */
+        body.open .curtain-left { 
+            transform: translateX(-100%); 
+        }
+        body.open .curtain-right { 
+            transform: translateX(100%); 
+        }
+
+        /* --- HERO TEXT REVEAL --- */
+        .hero {
+            height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            text-align: center; padding: 20px; overflow: hidden;
+            position: relative;
+            
+            /* 3D perspective for the text zoom */
+            perspective: 1000px; 
+        }
+
+        .hero-text {
+            font-size: 3.5rem; font-weight: 900;
+            
+            /* Gradient Text */
+            background: linear-gradient(45deg, #FF00CC, #333399, #00CCFF);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 3s ease infinite;
+
+            /* Initial State: Invisible and deeply zoomed IN */
+            opacity: 0; 
+            transform: scale(3) translateZ(100px); 
+            filter: blur(20px); /* Blurry at first */
+
+            /* The Transition */
+            transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition-delay: 0.2s; /* Wait slightly for curtains to crack open */
+        }
+
+        /* Final State: Visible, normal size, sharp */
+        body.open .hero-text { 
+            opacity: 1; 
+            transform: scale(1) translateZ(0); 
+            filter: blur(0);
+        }
+
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* --- CONTENT & GLASSMORPHISM --- */
+        .content-container {
+            max-width: 800px; margin: 0 auto; padding-bottom: 100px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 10px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            /* Make sure card stands out against aurora */
+            position: relative;
+            z-index: 10;
+        }
+
+        .scroll-block {
+            opacity: 0; transform: translateX(-150px);
+            transition: all 0.8s ease-out; margin: 80px 20px;
+        }
+        .scroll-block.visible { opacity: 1; transform: translateX(0); }
+
+        /* IMAGE STYLES */
+        .image-wrapper {
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+        }
+        
+        .image-wrapper img {
+            width: 100%; height: 400px; object-fit: cover;
+            border-radius: 15px; display: block;
+            transition: transform 0.1s ease-out;
+        }
+
+        /* HEADING STYLES */
+        .heading-wrapper { text-align: center; padding: 30px; }
+        
+        .section-heading {
+            font-size: 2rem; color: #ddd; margin: 0;
+            text-transform: uppercase; letter-spacing: 2px;
+            text-shadow: 0 0 5px #FF00CC, 0 0 15px #FF00CC, 0 0 30px #FF00CC;
+            animation: neonPulse 2s infinite alternate;
+        }
+        
+        @keyframes neonPulse {
+            from { text-shadow: 0 0 5px #FF00CC, 0 0 15px #FF00CC, 0 0 30px #FF00CC; }
+            to { text-shadow: 0 0 10px #00CCFF, 0 0 25px #00CCFF, 0 0 50px #00CCFF; opacity: 0.8; }
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            position: relative;
+            background-color: transparent; /* Changed to transparent so Aurora shows through */
+            padding: 60px 20px;
+            overflow: hidden;
+        }
+
+        .footer-content {
+            display: flex; flex-direction: column; align-items: center; gap: 25px;
+            background: rgba(0, 0, 0, 0.6); /* Slightly darker glass for footer */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            max-width: 90vw; margin: 0 auto; padding: 50px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            position: relative; z-index: 1;
+        }
+
+        .profile-pic {
+            width: 140px; height: 140px; border-radius: 50%; object-fit: cover;
+            padding: 4px; background: linear-gradient(45deg, #FF00CC, #00CCFF);
+            box-shadow: 0 0 30px rgba(255, 0, 204, 0.3);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .profile-pic:hover {
+            transform: scale(1.1) rotate(3deg);
+            box-shadow: 0 0 50px rgba(0, 204, 255, 0.5);
+        }
+
+        .contact-info h3 {
+            font-size: 2rem; font-weight: 700; margin-bottom: 20px; text-align: center;
+            background: linear-gradient(to right, #FF00CC, #00CCFF);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+
+        .contact-link {
+            display: inline-flex; align-items: center; justify-content: center;
+            margin: 8px 10px; padding: 12px 28px;
+            color: #e0e0e0; text-decoration: none;
+            font-size: 1rem; font-weight: 500;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px; transition: all 0.3s ease;
+        }
+        .contact-link:hover {
+            background: rgba(255, 255, 255, 0.1); border-color: #FF00CC; color: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 0, 204, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .hero-text { font-size: 2.2rem; }
+            .section-heading { font-size: 1.5rem; }
+            .cursor-follower, .cursor-dot { display: none; }
+            * { cursor: auto; }
+            .footer-content { width: 90%; padding: 30px 20px; }
+            /* Make aurora slightly brighter on mobile to compete with outdoor glare */
+            .aurora-blob { opacity: 0.6; } 
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor-dot"></div>
+    <div class="cursor-follower"></div>
+
+    <div class="aurora-container">
+        <div class="aurora-blob blob-1"></div>
+        <div class="aurora-blob blob-2"></div>
+        <div class="aurora-blob blob-3"></div>
+    </div>
+
+    <div id="stars-container"></div>
+
+    <div class="curtain curtain-left"></div>
+    <div class="curtain curtain-right"></div>
+
+    <section class="hero">
+        <div class="hero-text">
+            Dhanyavad,<br>ye mera swabhagya hai.
+        </div>
+    </section>
+
+    <div class="content-container">
+
+        <div class="scroll-block glass-card image-wrapper" data-tilt>
+            <img src="giphy.gif" alt="Placeholder 1">
+        </div>
+
+        <div class="scroll-block glass-card heading-wrapper">
+            <h2 class="section-heading">kitni umar ho gayi ab? <br>&darr;</h2>
+        </div>
+
+        <div class="scroll-block glass-card image-wrapper" data-tilt>
+            <img src="giphy (1).gif" alt="Placeholder 2">
+        </div>
+
+        <div class="scroll-block glass-card heading-wrapper">
+            <h2 class="section-heading">sab Badhiya hai? <br>&darr;</h2>
+        </div>
+
+        <div class="scroll-block glass-card image-wrapper" data-tilt>
+            <img src="mast-me-bhi.gif" alt="Placeholder 3">
+        </div>
+
+        <div class="scroll-block glass-card heading-wrapper">
+            <h2 class="section-heading">Birthday kaise manaoge? <br>&darr;</h2>
+        </div>
+
+        <div class="scroll-block glass-card image-wrapper" data-tilt>
+            <img src="58ee7cf98c50002d1af055a407ae4d62.gif" alt="Placeholder 3">
+        </div>
+
+    </div>
+
+    <footer class="scroll-block">
+        <div class="glass-card footer-content">
+            <img src="Gemini_Generated_Image_bwpvglbwpvglbwpv.png" alt="My Profile" class="profile-pic">
+            
+            <div class="contact-info">
+                <h3>Contact Me</h3>
+                <a href="tel:+919818182032" class="contact-link">📞 +91 98181 82032</a>
+                <br>
+                <a href="#" class="contact-link">📧 email: mai call bhee mushkil hee uthata hu</a>
+                <br><br>
+                <a href="#" class="contact-link">&#128138; Relife</a>
+                <a href="#" class="contact-link">&#128167; that time i got reincarnated as a slime</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.2/vanilla-tilt.min.js"></script>
+
+    <script>
+        // --- 1. FORCE SCROLL TO TOP ---
+        if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+        window.scrollTo(0, 0);
+
+        // --- 2. PAGE LOAD SEQUENCE ---
+        window.addEventListener('load', () => {
+            // 1. Force scroll to top immediately
+            window.scrollTo(0, 0);
+
+            // 2. Small delay to let the user see the "Glowing Seam" before it opens
+            setTimeout(() => {
+                document.body.classList.add('open');
+            }, 600); // Increased delay to 600ms to build anticipation
+            
+            generateStars(); 
+        });
+
+        // --- 3. SCROLL ANIMATION OBSERVER ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                } else {
+                    entry.target.classList.remove('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.scroll-block').forEach((el) => observer.observe(el));
+
+        // --- 4. GENERATE STARS JS ---
+        function generateStars() {
+            const container = document.getElementById('stars-container');
+            for(let i = 0; i < 100; i++) { 
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 20}s`;
+                container.appendChild(star);
+            }
+        }
+
+        // --- 5. CUSTOM CURSOR JS ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorFollower = document.querySelector('.cursor-follower');
+
+        if(window.matchMedia("(pointer: fine)").matches) {
+            document.addEventListener('mousemove', (e) => {
+                const posX = e.clientX;
+                const posY = e.clientY;
+
+                cursorDot.style.left = `${posX}px`;
+                cursorDot.style.top = `${posY}px`;
+
+                setTimeout(() => {
+                    cursorFollower.style.left = `${posX}px`;
+                    cursorFollower.style.top = `${posY}px`;
+                }, 50); 
+            });
+
+            document.querySelectorAll('a, button, .glass-card').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursorFollower.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                    cursorFollower.style.background = 'rgba(255, 0, 204, 0.1)';
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursorFollower.style.transform = 'translate(-50%, -50%) scale(1)';
+                    cursorFollower.style.background = 'transparent';
+                });
+            });
+        }
+
+        // --- 6. INITIALIZE 3D TILT ---
+        VanillaTilt.init(document.querySelectorAll(".image-wrapper"), {
+            max: 15, 
+            speed: 400, 
+            glare: true, 
+            "max-glare": 0.3, 
+        });
+    </script>
+</body>
+</html>

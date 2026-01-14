@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sach Batao?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            /* Deep, rich animated gradient background */
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassmorphism Card Style */
+        .card {
+            background: rgba(255, 255, 255, 0.15); /* Translucent white */
+            backdrop-filter: blur(12px); /* Frosted glass effect */
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 100%;
+            width: 420px;
+            animation: fadeIn 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Bouncy entry */
+            color: white;
+            position: relative;
+            z-index: 10;
+        }
+
+        .inner-image {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            border: 4px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
+        
+        .inner-image:hover {
+            transform: scale(1.02);
+        }
+
+        h1 { 
+            color: #fff; 
+            margin-bottom: 30px; 
+            font-size: 2rem; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .btn-container { 
+            display: flex; 
+            gap: 20px; 
+            flex-direction: column; 
+        }
+
+        button {
+            padding: 16px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px; /* Pill shape */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:active { transform: scale(0.95); }
+
+        /* Modern Gradient Buttons */
+        .btn-yaad {
+            background: linear-gradient(45deg, #11998e, #38ef7d);
+            color: white;
+            box-shadow: 0 5px 15px rgba(56, 239, 125, 0.4);
+        }
+        .btn-yaad:hover { 
+            background: linear-gradient(45deg, #0e857b, #2de071);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(56, 239, 125, 0.6);
+        }
+
+        .btn-bhul {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
+        }
+        .btn-bhul:hover { 
+            background: linear-gradient(45deg, #e63960, #e64225);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 75, 43, 0.6);
+        }
+
+        #result { 
+            margin-top: 25px; 
+            font-weight: 800; 
+            font-size: 1.2rem; 
+            min-height: 30px; 
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        @media (min-width: 600px) { .btn-container { flex-direction: row; } }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        
+        /* Shake Animation Class */
+        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        /* Background Circles */
+        .circles {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: -1; 
+        }
+
+        .circles li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            animation: animate 25s linear infinite;
+            bottom: -150px;
+        }
+
+        .circles li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+        .circles li:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+        .circles li:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+        .circles li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+        .circles li:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
+        .circles li:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
+        .circles li:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; }
+        .circles li:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
+        .circles li:nth-child(9) { left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; }
+        .circles li:nth-child(10){ left: 85%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 11s; }
+
+        @keyframes animate {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 0; }
+            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; border-radius: 50%; }
+        }
+
+        /* Happy Dance Animation */
+        .happy-dance {
+            animation: happyAnim 1.5s ease-in-out;
+        }
+
+        @keyframes happyAnim {
+            0% { transform: scale(1) rotate(0deg); }
+            30% { transform: scale(1.1) translateY(-30px) rotate(-5deg); } 
+            60% { transform: scale(1.1) translateY(-30px) rotate(365deg); } 
+            100% { transform: scale(1) translateY(0) rotate(360deg); } 
+        }
+    </style>
+</head>
+<body>
+        <ul class="circles">
+            <li></li><li></li><li></li><li></li><li></li>
+            <li></li><li></li><li></li><li></li><li></li>
+        </ul>
+    <div class="card" id="mainCard">
+        
+        <img src="200w.gif" 
+             alt="Thinking..." 
+             class="inner-image" 
+             id="displayImage">
+
+        <h1>Sach batao...</h1>
+        
+        <div class="btn-container">
+            <button class="btn-yaad" onclick="handleClick('yaad')">Yaad Hai. 😊</button>
+            <button class="btn-bhul" onclick="handleClick('bhul')">Nahi Pata 😔</button>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function handleClick(type) {
+            const resultDiv = document.getElementById('result');
+            const imgElement = document.getElementById('displayImage');
+            const card = document.getElementById('mainCard');
+
+            if(type === 'yaad') {
+                // 1. Text Feedback
+                resultDiv.innerText = "Chalo shukar hai! ❤️";
+                // Changed text color to white with shadow for better visibility on glass
+                resultDiv.style.color = "#fff"; 
+                resultDiv.style.textShadow = "0 0 10px #38ef7d";
+                
+                // Nested if kept as per your original logic
+                if(type === 'yaad') {
+                    card.classList.add('happy-dance');
+                }
+
+                // 2. Change Image to Happy
+                imgElement.src = "yay-yeah.gif"; 
+
+                // 3. Fire Confetti
+                confetti({
+                    particleCount: 150, // Increased slightly
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#ff0', '#0f0', '#00f'] // Bright colors
+                });
+
+                // 4. Redirect after 2.5 seconds
+                setTimeout(function() {
+                    window.location.href = "yaad hai.html"; 
+                }, 2500);
+
+            } else {
+                // 1. Text Feedback
+                resultDiv.innerText = "Arey yaar... 💔";
+                resultDiv.style.color = "#fff";
+                resultDiv.style.textShadow = "0 0 10px #ff416c";
+
+                // 2. Change Image to Sad
+                imgElement.src = "spongebob-its-no-trouble.gif"; 
+
+                // 3. Shake the Card
+                card.classList.add('shake');
+                
+                setTimeout(() => {
+                    card.classList.remove('shake');
+                }, 500);
+
+                setTimeout(function() {
+                    window.location.href = "no.html"; 
+                }, 2500);
+            }
+        }
+    </script>
+</body>
+</html>
