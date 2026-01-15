@@ -578,6 +578,10 @@
         </div>
     </footer>
 
+     <audio id="song-play">
+        <source src="Miki Matsubara - Stay With Me HD Club Mix.mp3" type="audio/mp3">
+    </audio>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.2/vanilla-tilt.min.js"></script>
 
     <script>
@@ -597,6 +601,13 @@
             
             generateStars(); 
         });
+
+        //play song
+        function songp(){
+            let songstart = document.getElementById("song-play");
+            songstart.play()
+            songstart.volume = 0.05;
+        }
 
         // --- 3. SCROLL ANIMATION OBSERVER ---
         const observer = new IntersectionObserver((entries) => {
@@ -674,6 +685,7 @@
     </script>
 </body>
 </html>
+
 
 
 
