@@ -204,6 +204,9 @@
             /* The Transition */
             transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             transition-delay: 0.2s; /* Wait slightly for curtains to crack open */
+
+            /*dropsown shadow*/
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
         /* Final State: Visible, normal size, sharp */
@@ -627,7 +630,7 @@
         // --- 4. GENERATE STARS JS ---
         function generateStars() {
             const container = document.getElementById('stars-container');
-            for(let i = 0; i < 1000; i++) { 
+            for(let i = 0; i < 500; i++) { 
                 const star = document.createElement('div');
                 star.className = 'star';
                 star.style.left = `${Math.random() * 100}%`;
@@ -687,6 +690,7 @@
     </script>
 </body>
 </html>
+
 
 
 
