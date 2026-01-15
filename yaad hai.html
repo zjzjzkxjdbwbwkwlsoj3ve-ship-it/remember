@@ -15,6 +15,8 @@
             cursor: none; /* Hide default cursor */
         }
 
+        html { scroll-behavior: smooth; }
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #050505; /* Deepest black */
@@ -218,7 +220,7 @@
 
         /* --- CONTENT & GLASSMORPHISM --- */
         .content-container {
-            max-width: 800px; margin: 0 auto; padding-bottom: 100px;
+            max-width: 800px; margin: 0 auto; padding-bottom: 100px;padding-top: 80px;
         }
 
         .glass-card {
@@ -328,6 +330,118 @@
             /* Make aurora slightly brighter on mobile to compete with outdoor glare */
             .aurora-blob { opacity: 0.6; } 
         }
+
+        /* Container: Attractive Gradient, Shadow, and Rounded Corners */
+.stylish-header {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    /* Dynamic Gradient Background */
+    background: linear-gradient(270deg, #667eea, #764ba2, #ff758c);
+    background-size: 600% 600%; /* Makes the gradient huge so we can move it */
+    animation: gradientFlow 8s ease infinite; /* Moves the background */
+
+    padding: 15px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    margin: 20px;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* --- MENU STYLING --- */
+.custom-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* The Button Look */
+.menu-btn {
+    list-style: none; /* Hides default triangle */
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.2); /* Glass effect */
+    border-radius: 30px;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.menu-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.menu-btn::marker {
+    display: none; /* Removes default detail marker in some browsers */
+}
+
+.arrow { font-size: 10px; }
+
+/* The Dropdown Box */
+.dropdown-items {
+    position: absolute;
+    top: 130%;
+    left: 0;
+    width: 200px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    padding: 10px 0;
+    list-style: none;
+    z-index: 100;
+    
+    /* Animation */
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.dropdown-items li a {
+    display: block;
+    padding: 12px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.2s;
+    font-size: 14px;
+}
+
+.dropdown-items li a:hover {
+    background-color: #f0f0ff;
+    color: #764ba2;
+}
+
+/* --- PROFILE STYLING --- */
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.5);
+    object-fit: cover;
+    transition: transform 0.2s, border-color 0.2s;
+    cursor: pointer;
+}
+
+.profile-pic:hover {
+    transform: scale(1.1); /* Pop effect */
+    border-color: #ffffff;
+}
+
+/* Animation for dropdown */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* for header */
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
     </style>
 </head>
 <body>
@@ -350,8 +464,32 @@
             Dhanyavad,<br>ye mera swabhagya hai.
         </div>
     </section>
-
+    
     <div class="content-container">
+    <header class="stylish-header">
+    
+    <div class="menu-wrapper">
+        <details class="custom-dropdown">
+            <summary class="menu-btn">
+                <span>Menu</span>
+                <span class="arrow">▼</span>
+            </summary>
+            <ul class="dropdown-items">
+                <li><a href="#part1">Go to Section 1</a></li>
+                <li><a href="#part2">Go to Section 2</a></li>
+                <li><a href="#part3">Go to Section 3</a></li>
+            </ul>
+        </details>
+    </div>
+
+    <div class="profile-wrapper">
+        <a href="#scroll-block">
+            <img src="https://ui-avatars.com/api/?name=User&background=random" alt="Profile" class="profile-pic">
+        </a>
+    </div>
+
+</header>
+
 
         <div class="scroll-block glass-card image-wrapper" data-tilt>
             <img src="giphy.gif" alt="Placeholder 1">
@@ -380,6 +518,11 @@
         <div class="scroll-block glass-card image-wrapper" data-tilt>
             <img src="58ee7cf98c50002d1af055a407ae4d62.gif" alt="Placeholder 3">
         </div>
+
+        <div class="scroll-block glass-card heading-wrapper">
+            <h2 class="section-heading">gaane ki site banai thee dekhlo<br>&darr;</h2>
+        </div>
+
         <a href="https://aakashrawat78643.pythonanywhere.com/">
         <div class="scroll-block glass-card image-wrapper" data-tilt>
             <img src="music.jpg" alt="Placeholder 3">
@@ -486,10 +629,17 @@
             glare: true, 
             "max-glare": 0.3, 
         });
+
+        // Listen for any click on the page
+    document.addEventListener('click', function(event) {
+        var dropdown = document.querySelector('.custom-dropdown');
+        
+        // If the click happened OUTSIDE the dropdown, close it
+        if (dropdown.hasAttribute('open') && !dropdown.contains(event.target)) {
+            dropdown.removeAttribute('open');
+        }
+    });
     </script>
 </body>
 
 </html>
-
-
-
