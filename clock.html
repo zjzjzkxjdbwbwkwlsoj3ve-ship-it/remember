@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Digital Clock</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 1. Reset and Body Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            /* Animated Gradient Background */
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        /* Animation Keyframes */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 2. The Glass Card Container */
+        .clock-container {
+            background: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Soft shadow */
+            backdrop-filter: blur(10px); /* The "Frosted Glass" blur effect */
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 40px;
+            text-align: center;
+            color: white;
+            min-width: 300px;
+        }
+
+        /* 3. Text Styling */
+        #time {
+            font-size: 80px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            /* Prevents jitter when numbers change width */
+            font-variant-numeric: tabular-nums; 
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        #day {
+            font-size: 30px;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 5px;
+        }
+
+        #date {
+            font-size: 18px;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        /* 4. Responsive Design (Mobile) */
+        @media (max-width: 600px) {
+            .clock-container {
+                width: 90%;
+                padding: 20px;
+            }
+            #time {
+                font-size: 50px; /* Smaller time on phone */
+            }
+            #day {
+                font-size: 20px;
+                letter-spacing: 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="clock-container">
+        <div id="time">00:00:00</div>
+        <div id="day">Day</div>
+        <div id="date">Date Month Year</div>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+
+            // 1. Get Time parts
+            let h = now.getHours().toString().padStart(2, '0');
+            let m = now.getMinutes().toString().padStart(2, '0');
+            let s = now.getSeconds().toString().padStart(2, '0');
+
+            // 2. Get Date parts
+            const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+            const dayOptions = { weekday: 'long' };
+            
+            let dateString = now.toLocaleDateString('en-US', dateOptions);
+            let dayString = now.toLocaleDateString('en-US', dayOptions);
+
+            // 3. Update HTML elements separately
+            document.getElementById("time").innerText = `${h}:${m}:${s}`;
+            document.getElementById("day").innerText = dayString;
+            document.getElementById("date").innerText = dateString;
+        }
+
+        // Update immediately on load, then every second
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
+
+</body>
+</html>
