@@ -42,6 +42,11 @@
             box-sizing: border-box; 
             margin-bottom: 20px;
             outline: none;
+            .display-screen {
+    /* ... your existing styles ... */
+    caret-color: transparent; /* Hides the blinking cursor */
+    cursor: default;          /* Shows arrow instead of text-select I-beam */
+}
         }
 
         /* Button Grid Layout */
@@ -139,34 +144,75 @@
         </div>
     </div>
 
-    <script>
-        const screen = document.getElementById('screen');
+        <script>
+    const screen = document.getElementById('screen');
+    let calculationFinished = false; // Replaces 'track' for clarity
 
-        function appendValue(val) {
-            if(screen.value === "Error") screen.value = "";
-            screen.value += val;
+    // Helper to check if a value is + - * / or .
+    const isOperator = (val) => ['+', '-', '*', '/', '.'].includes(val);
+
+    function appendValue(val) {
+        // 1. Logic to reset screen if we just finished a calculation
+        // But ONLY if the user types a number. If they type +, we want to keep the result.
+        if (calculationFinished && !isOperator(val)) {
+            screen.value = "";
+            calculationFinished = false;
+        }
+        
+        // Reset flag if user continues with an operator (e.g. Result is 10, user hits +)
+        if (calculationFinished && isOperator(val)) {
+            calculationFinished = false;
         }
 
-        function clearScreen() {
+        // 2. Clear "Error" message if user types anything
+        if (screen.value === "Error") {
             screen.value = "";
         }
 
-        function deleteLast() {
-            if(screen.value === "Error") {
-                screen.value = "";
-            } else {
-                screen.value = screen.value.toString().slice(0, -1);
-            }
+        // 3. Prevent double operators (e.g. 5++5)
+        // If the last char is an operator AND the new val is an operator, replace it
+        let lastChar = screen.value.slice(-1);
+        if (screen.value.length > 0 && isOperator(lastChar) && isOperator(val)) {
+            // Delete the last char so we can replace it with the new one
+            screen.value = screen.value.slice(0, -1); 
         }
 
-        function calculateResult() {
-            try {
-                if(screen.value === "") return;
-                screen.value = eval(screen.value); 
-            } catch (error) {
-                screen.value = "Error";
-            }
+        screen.value += val;
+    }
+
+    function clearScreen() {
+        screen.value = "";
+        calculationFinished = false;
+    }
+
+    function deleteLast() {
+        if (screen.value === "Error" || calculationFinished) {
+            screen.value = "";
+            calculationFinished = false;
+        } else {
+            screen.value = screen.value.toString().slice(0, -1);
         }
+    }
+
+    function calculateResult() {
+        try {
+            if (screen.value === "") return;
+            
+            // Eval logic
+            let result = eval(screen.value);
+            
+            // Fix floating point weirdness (e.g. 0.1 + 0.2 = 0.300000004)
+            if (!Number.isInteger(result)) {
+                result = parseFloat(result.toFixed(8));
+            }
+
+            screen.value = result;
+            calculationFinished = true; // Mark calculation as done
+        } catch (error) {
+            screen.value = "Error";
+            calculationFinished = true;
+        }
+    }
     </script>
 </body>
 </html>
