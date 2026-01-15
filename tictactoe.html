@@ -81,7 +81,7 @@
             <div class="cell" onclick="handleMove(8)"></div>
         </div>
 
-        <div id="status">Play as X. Click a box to start.</div>
+        <div id="status">Play as O. Click a box to start.</div>
         <button onclick="resetGame()">Restart Game</button>
     </div>
 
@@ -90,8 +90,8 @@
         
         let board = ['', '', '', '', '', '', '', '', ''];
         let gameActive = true;
-        let humanPlayer = 'X';
-        let botPlayer = 'O';
+        let humanPlayer = 'O';
+        let botPlayer = 'X';
         let turn = humanPlayer; 
         
         // Winning combinations (Rows, Columns, Diagonals)
@@ -162,7 +162,7 @@
                 checkWinner();
                 if(gameActive) {
                     turn = humanPlayer;
-                    statusDisplay.innerText = "Your Turn (X)";
+                    statusDisplay.innerText = "Your Turn (O)";
                 }
             }
         }
@@ -240,12 +240,13 @@
             board = ['', '', '', '', '', '', '', '', ''];
             gameActive = true;
             turn = humanPlayer;
-            statusDisplay.innerText = "Play as X. Click a box to start.";
+            statusDisplay.innerText = "Play as O. Click a box to start.";
             cells.forEach(cell => {
                 cell.innerText = '';
-                cell.classList.remove('taken', 'x', 'o');
+                cell.classList.remove('taken', 'O', 'X');
             });
         }
     </script>
 </body>
+
 </html>
