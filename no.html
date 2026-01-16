@@ -221,6 +221,58 @@
             pointer-events: none;
         }
 
+
+        /* --- MOBILE FIXES --- */
+    body, html {
+        overflow-x: hidden; /* Prevents the rotated marquee from causing side-scroll */
+        width: 100%;
+    }
+
+    @media (max-width: 768px) {
+        
+        /* 1. Fix the Hero Height for Mobile Browsers */
+        .hero {
+            height: 100dvh; /* dvh = dynamic viewport height (accounts for URL bar) */
+            min-height: 600px; /* Safety net so content doesn't bunch up */
+        }
+
+        /* 2. Fix the Timer (2x2 Grid instead of 1x4) */
+        .timer-grid {
+            grid-template-columns: repeat(2, 1fr); /* 2 columns */
+            gap: 10px;
+        }
+        .time-val {
+            font-size: 2.5rem; /* Slightly smaller text */
+        }
+
+        /* 3. Fix the Marquee (Widen it so rotation doesn't show gaps) */
+        .marquee-strip {
+            width: 110%; /* Make it wider than screen */
+            margin-left: -5%; /* Center it back */
+            font-size: 1rem; /* Smaller text for mobile */
+        }
+
+        /* 4. Fix the Reasons (Stack text and number vertically) */
+        .reason-row {
+            flex-direction: column; /* Stack top to bottom */
+            text-align: center;
+            gap: 20px;
+        }
+        .reason-text {
+            order: 2; /* Put text below number */
+        }
+        .reason-num {
+            order: 1; /* Put number on top */
+            font-size: 4rem;
+            color: var(--alert); /* Make number orange on mobile for style */
+        }
+        
+        /* 5. Adjust Glitch Title Size */
+        .glitch-text {
+            font-size: 15vw; /* Make it chunky on mobile */
+        }
+    }
+
     </style>
 </head>
 <body>
@@ -388,6 +440,7 @@
 </body>
 
 </html>
+
 
 
 
