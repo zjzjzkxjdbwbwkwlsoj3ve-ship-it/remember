@@ -326,15 +326,51 @@
             box-shadow: 0 5px 15px rgba(255, 0, 204, 0.2);
         }
 
-        @media (max-width: 768px) {
-            .hero-text { font-size: 2.2rem; }
-            .section-heading { font-size: 1.5rem; }
-            .cursor-follower, .cursor-dot { display: none; }
-            * { cursor: auto; }
-            .footer-content { width: 90%; padding: 30px 20px; }
-            /* Make aurora slightly brighter on mobile to compete with outdoor glare */
-            .aurora-blob { opacity: 0.6; } 
+       /* --- MOBILE OPTIMIZATION --- */
+    @media (max-width: 768px) {
+        /* Basic Adjustments */
+        .hero-text { font-size: 2.2rem; }
+        .section-heading { font-size: 1.5rem; }
+        .cursor-follower, .cursor-dot { display: none; } /* Remove custom cursor */
+        * { cursor: auto; } /* Restore default touch cursor */
+        .footer-content { width: 90%; padding: 30px 20px; }
+
+        /* --- PERFORMANCE SAVERS (The Secret Sauce) --- */
+
+        /* 1. Disable Glassmorphism (Heavy GPU usage) */
+        .glass-card, .footer-content, .menu-btn {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            /* Use a darker, more opaque background instead of blur */
+            background: rgba(10, 10, 10, 0.95) !important; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
+        /* 2. Reduce Aurora Blur Quality */
+        .aurora-blob {
+            filter: blur(30px); /* Reduced from 80px */
+            opacity: 0.4;
+            animation-duration: 30s; /* Slower animation is easier to render */
+        }
+
+        /* 3. Disable Text Neon Pulse (Heavy CPU usage) */
+        .section-heading {
+            animation: none;
+            text-shadow: 0 0 10px #FF00CC; /* Static glow only */
+        }
+
+        /* 4. Remove Curtain Glows */
+        .curtain-left, .curtain-right {
+            box-shadow: none;
+        }
+        
+        /* 5. Disable 3D Tilt perspective on images */
+        .image-wrapper {
+            transform: none !important;
+            perspective: none !important;
+        }
+    }
 
         /* Container: Attractive Gradient, Shadow, and Rounded Corners */
 .stylish-header {
@@ -649,8 +685,14 @@
 
         // --- 4. GENERATE STARS JS ---
         function generateStars() {
-            const container = document.getElementById('stars-container');
-            for(let i = 0; i < 500; i++) { 
+           const container = document.getElementById('stars-container');
+            
+            // Check if screen is small (Mobile)
+            const isMobile = window.innerWidth < 768;
+            
+            // If Mobile, 50 stars. If Laptop, 500 stars.
+            const starCount = isMobile ? 50 : 500;
+            for(let i = 0; i < starCount; i++) { 
                 const star = document.createElement('div');
                 star.className = 'star';
                 star.style.left = `${Math.random() * 100}%`;
@@ -691,12 +733,15 @@
         }
 
         // --- 6. INITIALIZE 3D TILT ---
-        VanillaTilt.init(document.querySelectorAll(".image-wrapper"), {
-            max: 15, 
-            speed: 400, 
-            glare: true, 
-            "max-glare": 0.3, 
-        });
+        // Only run 3D tilt if screen is wider than 768px (Laptop/PC)
+        if (window.innerWidth > 768) {
+            VanillaTilt.init(document.querySelectorAll(".image-wrapper"), {
+                max: 15, 
+                speed: 400, 
+                glare: true, 
+                "max-glare": 0.3, 
+            });
+        }
 
         // Listen for any click on the page
     document.addEventListener('click', function(event) {
@@ -710,6 +755,7 @@
     </script>
 </body>
 </html>
+
 
 
 
