@@ -185,6 +185,29 @@
             60% { transform: scale(1.1) translateY(-30px) rotate(365deg); } 
             100% { transform: scale(1) translateY(0) rotate(360deg); } 
         }
+
+
+        /* --- MOBILE OPTIMIZATION --- */
+        @media (max-width: 600px) {
+            /* 1. Existing Layout Fix */
+            .btn-container { flex-direction: column; } 
+
+            /* 2. Reduce Background Processing (The Battery Saver) */
+            /* Hide every second floating square. 10 squares -> 5 squares */
+            .circles li:nth-child(2n) {
+                display: none;
+            }
+
+            /* 3. Simplify Shadows */
+            /* Heavy shadows are hard for mobile GPUs to render during animation */
+            .card {
+                box-shadow: 0 5px 15px rgba(0,0,0,0.15); 
+                will-change: transform; /* Tells mobile browser to prepare for animation */
+            }
+            
+            /* 4. Keep button shadows simple */
+            button { box-shadow: none; }
+        }
     </style>
 </head>
 <body>
@@ -214,53 +237,55 @@
             const resultDiv = document.getElementById('result');
             const imgElement = document.getElementById('displayImage');
             const card = document.getElementById('mainCard');
+            
+            // Check if user is on Mobile
+            const isMobile = window.innerWidth < 600;
 
             if(type === 'yaad') {
                 // 1. Text Feedback
                 resultDiv.innerText = "Chalo shukar hai! ❤️";
-                // Changed text color to white with shadow for better visibility on glass
-                resultDiv.style.color = "#fff"; 
-                resultDiv.style.textShadow = "0 0 10px #38ef7d";
-                
-                // Nested if kept as per your original logic
-                if(type === 'yaad') {
-                    card.classList.add('happy-dance');
-                }
+                resultDiv.style.color = "#2f855a";
 
-                // 2. Change Image to Happy
+                // 2. Happy Dance Animation
+                card.classList.remove('shake'); // Safety cleanup
+                card.classList.add('happy-dance');
+
+                // 3. Change Image to Happy
                 imgElement.src = "yay-yeah.gif"; 
 
-                // 3. Fire Confetti
+                // 4. Fire Confetti (Optimized)
+                // If Mobile: 40 particles. If Laptop: 100 particles.
                 confetti({
-                    particleCount: 150, // Increased slightly
-                    spread: 70,
-                    origin: { y: 0.6 },
-                    colors: ['#ff0', '#0f0', '#00f'] // Bright colors
+                    particleCount: isMobile ? 40 : 100, 
+                    spread: isMobile ? 50 : 70,
+                    origin: { y: 0.6 }
                 });
 
-                // 4. Redirect after 2.5 seconds
+                // 5. Redirect after 2.5 seconds
                 setTimeout(function() {
-                    window.location.href = "https://zjzjzkxjdbwbwkwlsoj3ve-ship-it.github.io/remember/yaad%20hai.html"; 
+                    window.location.href = "yaad hai.html"; 
                 }, 2500);
 
             } else {
                 // 1. Text Feedback
                 resultDiv.innerText = "Arey yaar... 💔";
-                resultDiv.style.color = "#fff";
-                resultDiv.style.textShadow = "0 0 10px #ff416c";
+                resultDiv.style.color = "#c53030";
 
                 // 2. Change Image to Sad
                 imgElement.src = "spongebob-its-no-trouble.gif"; 
 
                 // 3. Shake the Card
+                card.classList.remove('happy-dance'); // Safety cleanup
                 card.classList.add('shake');
                 
+                // Remove class so it can shake again if clicked again
                 setTimeout(() => {
                     card.classList.remove('shake');
                 }, 500);
 
+                // 4. Redirect
                 setTimeout(function() {
-                    window.location.href = "no.html"; 
+                    window.location.href = "thankyou.html"; 
                 }, 2500);
             }
         }
@@ -268,4 +293,5 @@
 </body>
 
 </html>
+
 
