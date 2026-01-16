@@ -208,6 +208,41 @@
             /* 4. Keep button shadows simple */
             button { box-shadow: none; }
         }
+
+        /* =========================================
+           MOBILE ONLY FIXES (The Anti-Lag Section)
+        ========================================= */
+        @media (max-width: 600px) {
+            
+            /* 1. Save GPU: Hide half the background squares on mobile */
+            .circles li:nth-child(even) {
+                display: none;
+            }
+
+            /* 2. Simplify Happy Dance: Remove rotation, just jump */
+            /* This overwrites the complex rotation only for mobile */
+            @keyframes happyAnim {
+                0% { transform: scale(1) translateY(0); }
+                40% { transform: scale(1.05) translateY(-40px); } /* Just jump up */
+                100% { transform: scale(1) translateY(0); } /* Land */
+            }
+            
+            /* Make it faster on mobile so it feels snappier */
+            .happy-dance {
+                animation-duration: 0.8s;
+            }
+
+            /* 3. Simplify Shake: Simple left-right shake, no rotation */
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                20%, 60% { transform: translateX(-10px); }
+                40%, 80% { transform: translateX(10px); }
+            }
+             /* Make it faster on mobile */
+            .shake {
+                animation-duration: 0.4s;
+            }
+        }
     </style>
 </head>
 <body>
@@ -238,26 +273,25 @@
             const imgElement = document.getElementById('displayImage');
             const card = document.getElementById('mainCard');
             
-            // Check if user is on Mobile
-            const isMobile = window.innerWidth < 600;
+            // FIX: Remove existing classes first so animation can restart if clicked again
+            card.classList.remove('happy-dance', 'shake');
 
             if(type === 'yaad') {
                 // 1. Text Feedback
                 resultDiv.innerText = "Chalo shukar hai! ❤️";
                 resultDiv.style.color = "#2f855a";
-
-                // 2. Happy Dance Animation
-                card.classList.remove('shake'); // Safety cleanup
+                
+                // 2. Add Happy Animation
+                // (I removed the duplicate 'if' check here that was in your old code)
                 card.classList.add('happy-dance');
 
                 // 3. Change Image to Happy
                 imgElement.src = "yay-yeah.gif"; 
 
-                // 4. Fire Confetti (Optimized)
-                // If Mobile: 40 particles. If Laptop: 100 particles.
+                // 4. Fire Confetti
                 confetti({
-                    particleCount: isMobile ? 40 : 100, 
-                    spread: isMobile ? 50 : 70,
+                    particleCount: 100,
+                    spread: 70,
                     origin: { y: 0.6 }
                 });
 
@@ -268,22 +302,21 @@
 
             } else {
                 // 1. Text Feedback
-                resultDiv.innerText = "Arey yaar... 💔";
+                resultDiv.innerText = "Arey koi nahi... 💔";
                 resultDiv.style.color = "#c53030";
 
                 // 2. Change Image to Sad
                 imgElement.src = "spongebob-its-no-trouble.gif"; 
 
-                // 3. Shake the Card
-                card.classList.remove('happy-dance'); // Safety cleanup
+                // 3. Add Shake Animation
                 card.classList.add('shake');
                 
-                // Remove class so it can shake again if clicked again
+                // Remove class after animation ends 
                 setTimeout(() => {
                     card.classList.remove('shake');
-                }, 500);
+                }, 500); 
 
-                // 4. Redirect
+                // 4. Redirect after 2.5 seconds
                 setTimeout(function() {
                     window.location.href = "no.html"; 
                 }, 2500);
@@ -293,6 +326,7 @@
 </body>
 
 </html>
+
 
 
 
