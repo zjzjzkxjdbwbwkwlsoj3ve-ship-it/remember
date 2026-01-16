@@ -322,7 +322,7 @@
         <div class="reason-row">
             <div class="reason-text">
                 <h2 class="scramble-text">THE FOOD</h2>
-                <p>Yes, I am giving no treat. No excuses.</p>
+                <p class="scramble-text">Yes, I am giving no treat. No excuses.</p>
             </div>
             <div class="reason-num">01</div>
         </div>
@@ -330,7 +330,7 @@
         <div class="reason-row">
             <div class="reason-text">
                 <h2 class="scramble-text">THE VIBE</h2>
-                <p>Have fun <sub>at your home</sub>.</p>
+                <p class="scramble-text">Have fun <sub>at your home</sub>.</p>
             </div>
             <div class="reason-num">02</div>
         </div>
@@ -338,7 +338,7 @@
         <div class="reason-row">
             <div class="reason-text">
                 <h2 class="scramble-text">THE MEMORY</h2>
-                <p>You don't want to miss the stories we'll make <sub>at home</sub>.</p>
+                <p class="scramble-text">You don't want to miss the stories we'll make <sub>at home</sub>.</p>
             </div>
             <div class="reason-num">03</div>
         </div>
@@ -382,7 +382,7 @@
 
         scrambleElements.forEach(el => {
             const originalText = el.innerText;
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+            const chars = "!@#$%^&*()_+=-][}{";
             
             el.addEventListener('mouseenter', () => { // Or trigger on scroll
                 let iterations = 0;
@@ -440,6 +440,7 @@
 </body>
 
 </html>
+
 
 
 
