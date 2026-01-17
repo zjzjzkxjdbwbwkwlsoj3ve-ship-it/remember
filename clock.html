@@ -98,31 +98,44 @@
     </div>
 
     <script>
-        function updateClock() {
-            const now = new Date();
+    function updateClock() {
+    const now = new Date();
 
-            // 1. Get Time parts
-            let h = now.getHours().toString().padStart(2, '0');
-            let m = now.getMinutes().toString().padStart(2, '0');
-            let s = now.getSeconds().toString().padStart(2, '0');
+    // 1. Get raw number values first
+    let rawHours = now.getHours();
+    let rawMinutes = now.getMinutes();
+    let rawSeconds = now.getSeconds();
 
-            // 2. Get Date parts
-            const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
-            const dayOptions = { weekday: 'long' };
-            
-            let dateString = now.toLocaleDateString('en-US', dateOptions);
-            let dayString = now.toLocaleDateString('en-US', dayOptions);
+    // 2. Determine AM or PM
+    let ampm = rawHours >= 12 ? 'PM' : 'AM';
 
-            // 3. Update HTML elements separately
-            document.getElementById("time").innerText = `${h}:${m}:${s}`;
-            document.getElementById("day").innerText = dayString;
-            document.getElementById("date").innerText = dateString;
-        }
+    // 3. Convert to 12-hour format
+    rawHours = rawHours % 12;
+    rawHours = rawHours ? rawHours : 12; // the hour '0' should be '12'
 
-        // Update immediately on load, then every second
-        updateClock();
-        setInterval(updateClock, 1000);
+    // 4. Pad with zeros
+    let h = rawHours.toString().padStart(2, '0');
+    let m = rawMinutes.toString().padStart(2, '0');
+    let s = rawSeconds.toString().padStart(2, '0');
+
+    // 5. Get Date parts
+    const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+    const dayOptions = { weekday: 'long' };
+    
+    let dateString = now.toLocaleDateString('en-US', dateOptions);
+    let dayString = now.toLocaleDateString('en-US', dayOptions);
+
+    // 6. Update HTML elements
+    // Note: I moved AM/PM here so it sits next to the time
+    document.getElementById("time").innerText = `${h}:${m}:${s} ${ampm}`;
+    document.getElementById("day").innerText = dayString;
+    document.getElementById("date").innerText = dateString;
+}
+
+updateClock();
+setInterval(updateClock, 1000);
     </script>
 
 </body>
+
 </html>
