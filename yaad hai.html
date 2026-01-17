@@ -494,25 +494,31 @@
 
         /* --- 1. The Container (Dark Glassmorphism) --- */
 .tech-stack-container {
-    /* Layout & Positioning */
+    /* 1. Layout & Positioning */
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 20px;
     
-    /* Size & Spacing */
-    max-width: 800px;
-    margin: 60px auto; /* Centers it */
-    padding: 20px 30px;
+    /* 2. THE FIX: Safe Zone Logic */
+    width: 90%;         /* Forces 5% gap on left and right */
+    max-width: 800px;   /* Stops it from getting too big on PC */
+    margin: 40px auto;  /* Centers it perfectly */
+    
+    /* 3. Padding inside the box */
+    padding: 20px 25px; 
     border-radius: 20px;
 
-    /* The Look (Matches your Aurora Theme) */
-    background: rgba(255, 255, 255, 0.03); /* Very transparent white */
-    backdrop-filter: blur(12px);            /* Blurs background behind it */
+    /* 4. The Look (Glassmorphism) */
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle white border */
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);  /* Deep shadow */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    
+    /* 5. Box Sizing (Crucial for padding calculation) */
+    box-sizing: border-box; 
 }
 
 /* Label Styling */
@@ -925,6 +931,7 @@
     </script>
 </body>
 </html>
+
 
 
 
