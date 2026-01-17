@@ -652,9 +652,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.2/vanilla-tilt.min.js"></script>
 
     <script>
-        // --- 1. FORCE SCROLL TO TOP ---
-        if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
-        window.scrollTo(0, 0);
 
         // --- 2. PAGE LOAD SEQUENCE ---
         window.addEventListener('load', () => {
@@ -665,6 +662,10 @@
             setTimeout(() => {
                 document.body.classList.add('open');
             }, 600); // Increased delay to 600ms to build anticipation
+            
+            // --- 1. FORCE SCROLL TO TOP ---
+        if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+        window.scrollTo(0, 0);
             
             generateStars(); 
         });
@@ -761,6 +762,7 @@
     </script>
 </body>
 </html>
+
 
 
 
